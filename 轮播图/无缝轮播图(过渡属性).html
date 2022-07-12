@@ -11,10 +11,10 @@
 <body>
     <div class="mainBox">
         <div class="banner">
-            <img id="img" src="./images/a1.jpg" alt="">
-            <img id="img" src="./images/a2.jpg" alt="">
-            <img id="img" src="./images/a3.jpg" alt="">
-            <img id="img" src="./images/a4.jpg" alt="">
+            <img id="img" src="../images/a1.jpg" alt="">
+            <img id="img" src="../images/a2.jpg" alt="">
+            <img id="img" src="../images/a3.jpg" alt="">
+            <img id="img" src="../images/a4.jpg" alt="">
         </div>
         <div class="btn left ">
             < </div> <div class="btn right">
@@ -28,7 +28,6 @@
         margin: 0px;
         padding: 0px;
     }
-
     .mainBox {
         margin: 150px auto;
         width: 600px;
@@ -37,7 +36,6 @@
         overflow: hidden;
 
     }
-
     .banner {
         position: absolute;
         width: 400%;
@@ -79,10 +77,7 @@
 
     }
 </style>
-<script type="module">
-    import {
-        animate
-    } from './js/animate.js'
+<script>
     let imgList = document.querySelectorAll('img')
     let leftBtn = document.querySelector('.left')
     let rightBtn = document.querySelector('.right')
@@ -92,23 +87,29 @@
     let newImg = imgList[0].cloneNode(true)
     banner.appendChild(newImg)
     banner.style.width = `${banner.children.length}00%`
-    // 动画函数
     rightBtn.onclick = () => {
         if (index == imgList.length) {
+            banner.style.removeProperty("transition")
             banner.style.left = `0px`
             index = 0
         }
         index++
-        animate(banner, -index * offset)
+        setTimeout(() => {
+            banner.style.left = -index * offset + 'px'
+            banner.style.transition = 'all 0.6s'
+        }, 5)
     }
-    leftBtn.onclick =() =>{
-        console.log(index)
-        if(index == 0){
-            banner.style.left = imgList.length * -  offset +'px'
+    leftBtn.onclick = () => {
+        if (index == 0) {
+            banner.style.removeProperty("transition")
+            banner.style.left = imgList.length * -offset + 'px'
             index = imgList.length
         }
-        index -- 
-        animate(banner, -index * offset)
+        index--
+        setTimeout(() => {
+            banner.style.left = -index * offset + 'px'
+            banner.style.transition = 'all 0.6s'
+        }, 5)
     }
 </script>
 

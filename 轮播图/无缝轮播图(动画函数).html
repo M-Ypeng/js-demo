@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>轮播图</title>
+    <title>无缝轮播图</title>
 </head>
 
 <body>
     <div class="mainBox">
         <div class="banner">
-            <img id="img" src="./images/a1.jpg" alt="">
-            <img id="img" src="./images/a2.jpg" alt="">
-            <img id="img" src="./images/a3.jpg" alt="">
-            <img id="img" src="./images/a4.jpg" alt="">
-
+            <img id="img" src="../images/a1.jpg" alt="">
+            <img id="img" src="../images/a2.jpg" alt="">
+            <img id="img" src="../images/a3.jpg" alt="">
+            <img id="img" src="../images/a4.jpg" alt="">
+        </div>
         <div class="btn left ">
             < </div> <div class="btn right">
                 >
@@ -24,11 +24,15 @@
     </div>
 </body>
 <style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
     .mainBox {
         margin: 150px auto;
         width: 600px;
         height: 300px;
-        /* background: pink; */
         position: relative;
         overflow: hidden;
 
@@ -48,6 +52,7 @@
     }
 
     .btn {
+        cursor: pointer;
         position: absolute;
         width: 40px;
         height: 80px;
@@ -65,29 +70,45 @@
     .right {
         right: 0px;
     }
+
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+    }
 </style>
-<script>
+<script type="module">
+    import {
+        animate
+    } from '../js/animate.js'
     let imgList = document.querySelectorAll('img')
     let leftBtn = document.querySelector('.left')
     let rightBtn = document.querySelector('.right')
     let offset = document.querySelector('.mainBox').offsetWidth //每一次的偏移量
     let banner = document.querySelector('.banner')
     let index = 0
-    leftBtn.onclick = () => {
-        index--
-        if (index < 0) {
-            index = imgList.length - 1
-        }
-        banner.style.left = `-${offset*index}px`
-        banner.style.transition = `all 0.6s`
-    }
+    let newImg = imgList[0].cloneNode(true)
+    banner.appendChild(newImg)
+    banner.style.width = `${banner.children.length}00%`
+    // 动画函数
     rightBtn.onclick = () => {
-        index++
         if (index == imgList.length) {
+            banner.style.left = `0px`
             index = 0
         }
-        banner.style.left = `-${offset*index}px`
-        banner.style.transition = `all 0.6s`
+        index++
+        animate(banner, -index * offset)
+    }
+    leftBtn.onclick =() =>{
+        console.log(index)
+        if(index == 0){
+            banner.style.left = imgList.length * -  offset +'px'
+            index = imgList.length
+        }
+        index -- 
+        animate(banner, -index * offset)
     }
 </script>
 
