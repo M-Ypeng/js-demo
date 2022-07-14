@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="mainBox">
+        <div class="bigBox">
+        </div>
+
+        <div class="coverBox">
+            <div class="mask">
+            </div>
+            <div class="overBox">
+                <!-- 游戏结束  -->
+            </div>
+        </div>
+
+    </div>
+    <script>
+        let mainBox = document.querySelector('.mainBox')
+        let bigBox = document.querySelector('.bigBox')
+        let timer = null
+        let index = 0
+        let speed = 1000
+        dynamicLoadingRow()
+        // 检验触底w
+        function testBottoming() {
+            let newMainBoxHeight = document.querySelector('.mainBox').offsetHeight
+            let newBigBoxHeight = document.querySelector('.bigBox').offsetHeight
+            if (newBigBoxHeight >= newMainBoxHeight) {
+                gameOver()
+            }
+        }
+        // 动态加载钢琴 一行
+        function dynamicLoadingRow() {
+            timer = setInterval(() => {
+                let row = document.createElement('div')
+                row.className = 'row'
+                let randomNum = parseInt(Math.random() * 3 + 1)
+                for (let i = 0; i < 4; i++) {
+                    let item = document.createElement('div')
+                    item.className = 'item'
+                    row.appendChild(item)
+                    item.onclick = itemClickfn
+                }
+                row.children[randomNum].className = 'activeItme item'
+                bigBox.appendChild(row)
+                testBottoming()
+            }, speed)
+        }
+        // 琴键点击
+        let itemClickfn = function itemClick(e) {
+            if (e.target.className == 'activeItme item') {
+                e.target.parentNode.parentNode.removeChild(e.target.parentNode)
+                index++
+            } else {
+                gameOver()
+            }
+        }
+
+        function gameOver() {
+            clearInterval(timer)
+            document.querySelector('.coverBox').style.display = 'block'
+            document.querySelector('.overBox').innerHTML = `游戏结束，分数为${index}分`
+        }
+    </script>
+
+    <style>
+        .overBox {
+            position: absolute;
+            top: 200px;
+            left: 70px;
+            font-size: 30px;
+            z-index: 999;
+            text-align: center;
+        }
+
+        .coverBox {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            display: none;
+        }
+
+        .mask {
+            width: 100%;
+            height: 100%;
+            background-image: url(../images/a1.jpg);
+            background-size: cover;
+            filter: blur(20px);
+
+        }
+
+        .mainBox {
+            width: 400px;
+            height: 600px;
+            border: 1px solid black;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bigBox {
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .row {
+            height: 100px;
+            width: 100%;
+            display: flex;
+        }
+
+        .item {
+            flex: 1;
+            background-color: white;
+            border: 1px solid black;
+            border-top: 0px;
+            border-left: 0px;
+            cursor: pointer;
+        }
+
+        .item:nth-child(4n+4) {
+            border-right: 0px;
+        }
+
+        .activeItme {
+            background-color: black;
+        }
+    </style>
+
+</body>
+
+</html>
