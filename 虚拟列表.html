@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>虚拟列表</title>
+</head>
+
+<style>
+    .outsideBox {
+        width: 500px;
+        height: 400px;
+        border: 1px solid black;
+        margin: 40px auto;
+        overflow: auto;
+    }
+
+    .insideBox {
+        background-color: pink;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        color: white;
+    }
+
+    .insideBox:nth-child(2n) {
+        background-color: skyblue;
+    }
+</style>
+
+<body>
+    <div class="outsideBox">
+        <div class="allIN">
+        </div>
+    </div>
+    <script>
+        var Analog = 1000
+        // 每页最多能展示的条数
+        var num = 10
+        var startIndex = 0
+        var endIndex = 10
+        var allIN = document.querySelector('.allIN')
+        var outsideBox = document.querySelector('.outsideBox')
+        // 数据盒子总高度
+        var allHeiht = Analog * 40
+        // 创建多条数据
+        function getDate(num) {
+            var dataList = []
+            for (var i = 0; i < num; i++) {
+                dataList.push({
+                    name: '小' + (i + 1),
+                })
+            }
+            return dataList
+        }
+        function renderFn(List) {
+            let arr = List.slice(startIndex, endIndex)
+            allIN.innerHTML = ''
+            arr.forEach(v => {
+                let div = document.createElement("div")
+                div.className = 'insideBox'
+                div.innerHTML = v.name
+                allIN.appendChild(div)
+            });
+            allIN.style.paddingTop = startIndex * 40 + 'px'
+            allIN.style.paddingBottom = (Analog - endIndex) * 40 + 'px'
+        }
+
+        function scrollFn() {
+            // 盒子卷去高度
+            let realScrollTop = outsideBox.scrollTop
+            startIndex = Math.floor(realScrollTop / 40)
+            endIndex = Math.ceil(realScrollTop / 40) + 10
+            renderFn(getDate(Analog))
+        }
+
+        renderFn(getDate(Analog))
+        outsideBox.addEventListener('scroll', scrollFn)
+    </script>
+
+
+
+</body>
+
+
+
+</html>
