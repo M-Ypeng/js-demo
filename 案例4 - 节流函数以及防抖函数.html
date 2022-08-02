@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节流函数以及防抖函数</title>
+</head>
+
+<body>
+    <h1>节流函数以及防抖函数</h1>
+    <input id="ipt" type="text" placeholder="测试一下防抖函数">
+    <button>提交</button>
+
+    <script>
+
+        // 防抖和节流 ：防抖函数和节流函数都是为了限制函数的执行频率，防止函数触发频率过高带导致响应速度跟不上响应速度
+
+        var ipt = document.querySelector('#ipt')
+        var button = document.querySelector('button')
+        // 输出函数
+        function exportValue() {
+            console.log('输出一下')
+        }
+
+        // 节流 ：throttle 如果一个事件被频繁触发多次，节流函数可以按照固定的频率去执行相应的事件处理方法。函数节流保证一个事件一定事件内只能执行一次。
+        // 节流函数
+        function throttle(callBack, threshold) {
+            let timer = null
+            return function () {
+                if (!timer) {
+                    timer = setTimeout(function () {
+                        callBack();
+                        timer = null;
+                    }, threshold)
+                }
+            }
+        }
+        button.addEventListener('click', throttle(exportValue, 1000), true)
+
+        //防抖 ：  Debounce 事件触发后延迟 n 秒执行，如果 n 秒之内重新触发的话，就会重新计算时间
+        // 防抖的使用场景 ：事件多次误点操作， 搜索框联想查询，短信验证，用户多次点击登录等等
+        // ipt.oninput = (e) => {
+        //     debounce(exportValue, 1000)
+        // }
+        // 事件监听
+        // button.addEventListener('click', debounce(exportValue, 800), true)
+        // 普通事件绑定
+        // button.onclick = debounce(exportValue, 1000)
+        // input事件触发
+        // ipt.oninput = debounce(exportValue, 2000)
+        // 防抖函数
+        function debounce(callBack, delay) {
+            // callBack 回调函数
+            // delay 延迟时间
+            let timer = null
+            return function () {
+                if (timer) {
+                    // 事件被触发，清除timer并重新开始计时
+                    clearTimeout(timer);
+                    timer = null;
+                }
+                timer = setTimeout(() => {
+                    callBack()
+                }, delay);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
